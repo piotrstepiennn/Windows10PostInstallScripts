@@ -30,13 +30,15 @@ function InstallTerminal
 {
     winget install --id Microsoft.Powershell --source winget
     winget install --id Microsoft.WindowsTerminal -e
+    mkdir "C:\Users\Admin\AppData\Local\terminal"
+    reg import .\OpenWithTerminal.reg
     Update-Help
     Write-Host "Windows Terminal Installed"
 }
 
 function InstallMSOffice
 {
-    $SourcePath = "G:\Images\o2021.10.2021.32+64.pl+en\Office_2021_ProPlus_Retail_Pazdziernik_2021_32-bit+64-bit_PL.img"
+    $SourcePath = "D:\Torrenty\o2021.10.2021.32+64.pl+en\Office_2021_ProPlus_Retail_Pazdziernik_2021_32-bit+64-bit_PL.img"
     $mount = Mount-DiskImage $SourcePath
     $driveLetter = ($mount | Get-Volume).DriveLetter
     $drive = $driveLetter + ':\'
@@ -49,13 +51,13 @@ function InstallMSOffice
 
 function InstallOftenUsedPrograms
 {
-    $packages = @("Google.Chrome","Winamp.Winamp","XPDBZ4MPRKNN30","Valve.Steam","Discord.Discord","RARLab.WinRAR","Git.Git","XP9KHM4BK9FZ7Q","OpenJS.NodeJS","XPDCFJDKLZJLP8")
+    $packages = @("Google.Chrome","Winamp.Winamp","XPDBZ4MPRKNN30","Discord.Discord","RARLab.WinRAR","Git.Git","XP9KHM4BK9FZ7Q","OpenJS.NodeJS","XPDCFJDKLZJLP8")
     foreach($package in $packages)
     {
-        winget install --id $package --accept-source-agreements --accept-package-agreements --location "D:\Program Files"
+        winget install --id $package --accept-source-agreements --accept-package-agreements --location "D:\Program Files\$package"
         Write-Host "$package Installed"
     }
-
+    reg import .\OpenWithCode.reg
 }
 
 & InstallUpdates
