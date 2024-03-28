@@ -1,5 +1,6 @@
 function InstallUpdates
 {
+    Write-Host "Updating Windows..."
     Install-Module PSWindowsUpdate
     Get-WindowsUpdate -AcceptAll -Install
     Write-Host "Windows Updated"
@@ -36,25 +37,12 @@ function InstallTerminal
     Write-Host "Windows Terminal Installed"
 }
 
-function InstallMSOffice
-{
-    $SourcePath = "D:\Torrenty\o2021.10.2021.32+64.pl+en\Office_2021_ProPlus_Retail_Pazdziernik_2021_32-bit+64-bit_PL.img"
-    $mount = Mount-DiskImage $SourcePath
-    $driveLetter = ($mount | Get-Volume).DriveLetter
-    $drive = $driveLetter + ':\'
-    $path =  $drive + 'Setup.exe'
-    Get-PSDrive > $null
-    start $path 
-    Dismount-DiskImage $SourcePath
-    Write-Host "MS Office Installed"
-}
-
 function InstallOftenUsedPrograms
 {
-    $packages = @("Google.Chrome","Winamp.Winamp","XPDBZ4MPRKNN30","Discord.Discord","RARLab.WinRAR","Git.Git","XP9KHM4BK9FZ7Q","OpenJS.NodeJS","XPDCFJDKLZJLP8")
+    $packages = @("Google.Chrome","Winamp.Winamp","VideoLAN.VLC","Discord.Discord","RARLab.WinRAR","Git.Git","XP9KHM4BK9FZ7Q","OpenJS.NodeJS","Valve.Steam","Docker.DockerDesktop","Adobe.Acrobat.Reader.64-bit","Oracle.VirtualBox","Oracle.JDK.19","Python.Python.3.11")
     foreach($package in $packages)
     {
-        winget install --id $package --accept-source-agreements --accept-package-agreements --location "D:\Program Files\$package"
+        winget install --id $package --accept-source-agreements --accept-package-agreements --location "C:\Program Files\$package"
         Write-Host "$package Installed"
     }
     reg import .\OpenWithCode.reg
@@ -65,5 +53,4 @@ function InstallOftenUsedPrograms
 & SetDateFormat
 & CopyCommonlyUsedFolders
 & InstallTerminal
-& InstallMSOffice
 & InstallOftenUsedPrograms
