@@ -41,7 +41,7 @@ function InstallTerminal
     oh-my-posh font install FiraCode
     # need to change font to FiraCode by replacing settings.json
     Copy-Item -Path "setting.json" -Destination "C:\Users\Admin\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\setting.json" -Force
-    oh-my-posh init pwsh --config 'C:\Users\Admin\AppData\Local\Programs\oh-my-posh\themes\capr4n.omp.json' | Invoke-Expression
+    Add-Content -Path $PROFILE.CurrentUserAllHosts -Value "Add-Content -Path `$PROFILE.CurrentUserAllHosts -Value 'oh-my-posh init pwsh --config ''C:\Users\Admin\AppData\Local\Programs\oh-my-posh\themes\capr4n.omp.json'' | Invoke-Expression'"
     Write-Host "Windows Terminal Theme Installed"
 }
 
