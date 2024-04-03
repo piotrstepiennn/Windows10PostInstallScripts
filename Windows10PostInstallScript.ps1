@@ -35,6 +35,14 @@ function InstallTerminal
     reg import .\OpenWithTerminal.reg
     Update-Help
     Write-Host "Windows Terminal Installed"
+    # installing theme
+    winget install JanDeDobbeleer.OhMyPosh -s winget
+    oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\jandedobbeleer.omp.json" | Invoke-Expression
+    oh-my-posh font install FiraCode
+    # need to change font to FiraCode by replacing settings.json
+    Copy-Item -Path "setting.json" -Destination "C:\Users\Admin\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\setting.json" -Force
+    oh-my-posh init pwsh --config 'C:\Users\Admin\AppData\Local\Programs\oh-my-posh\themes\capr4n.omp.json' | Invoke-Expression
+    Write-Host "Windows Terminal Theme Installed"
 }
 
 function InstallOftenUsedPrograms
