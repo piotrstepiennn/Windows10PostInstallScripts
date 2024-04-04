@@ -3,6 +3,7 @@ function InstallUpdates
     Write-Host "Updating Windows..."
     Install-Module PSWindowsUpdate
     Get-WindowsUpdate -AcceptAll -Install
+    Update-Help
     Write-Host "Windows Updated"
 }
 function SetDarkTheme
@@ -27,21 +28,35 @@ function CopyCommonlyUsedFolders
     Write-Host "Often used folders copied"
 }
 
+function InstallWinget
+{
+    $progressPreference = 'silentlyContinue'
+    Write-Information "Downloading WinGet and its dependencies..."
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Write-Host "Winget Installed"
+}
+
 function InstallTerminal
 {
-    winget install --id Microsoft.Powershell --source winget
-    winget install --id Microsoft.WindowsTerminal -e
+    Write-Host "Installing Powershell Core and Windows Terminal"
+    winget install --id Microsoft.Powershell --accept-source-agreements --accept-package-agreements --source winget
+    winget install --id Microsoft.WindowsTerminal --accept-source-agreements --accept-package-agreements -e
     mkdir "C:\Users\Admin\AppData\Local\terminal"
     reg import .\OpenWithTerminal.reg
-    Update-Help
     Write-Host "Windows Terminal Installed"
     # installing theme
-    winget install JanDeDobbeleer.OhMyPosh -s winget
-    oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\jandedobbeleer.omp.json" | Invoke-Expression
-    oh-my-posh font install FiraCode
+    winget install JanDeDobbeleer.OhMyPosh --accept-source-agreements --accept-package-agreements -s winget
+    Exit-PSSession
+    Start-Process powershell.exe
+    & ".\initOhMyPosh.ps1"
     # need to change font to FiraCode by replacing settings.json
-    Copy-Item -Path "setting.json" -Destination "C:\Users\Admin\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\setting.json" -Force
-    Add-Content -Path $PROFILE.CurrentUserAllHosts -Value "Add-Content -Path `$PROFILE.CurrentUserAllHosts -Value 'oh-my-posh init pwsh --config ''C:\Users\Admin\AppData\Local\Programs\oh-my-posh\themes\capr4n.omp.json'' | Invoke-Expression'"
+    Copy-Item -Path "settings.json" -Destination "C:\Users\Admin\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Force
+    Add-Content -Path $PROFILE.CurrentUserAllHosts -Value 'oh-my-posh init pwsh --config C:\Users\Admin\AppData\Local\Programs\oh-my-posh\themes\capr4n.omp.json | Invoke-Expression'
     Write-Host "Windows Terminal Theme Installed"
 }
 
@@ -54,11 +69,20 @@ function InstallOftenUsedPrograms
         Write-Host "$package Installed"
     }
     reg import .\OpenWithCode.reg
+    $Arguments = @(
+    "/S"
+    "/V/qn"
+    )
+    Start-Process -Wait -FilePath "..\QTTabBar.exe" -ArgumentList $Arguments -NoNewWindow -PassThru
+    Start-Process -Wait -FilePath "..\Adobe.Acrobat.Pro.DC.2020.006.20042.Preattivato.Multi-[WEB]\Setup.exe" -ArgumentList $Arguments -NoNewWindow -PassThru
+    Write-Host "Often used programs installed"
+    Write-Host "Windows 10 Post Install Script Complete"
 }
 
 & InstallUpdates
 & SetDarkTheme
 & SetDateFormat
 & CopyCommonlyUsedFolders
+& InstallWinget
 & InstallTerminal
 & InstallOftenUsedPrograms
