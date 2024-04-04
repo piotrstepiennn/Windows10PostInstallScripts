@@ -1,8 +1,13 @@
 Windows Registry Editor Version 5.00
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\wt]
-@="Windows terminal here"
-"Icon"="D:\\format\\programy\\Windows10PostInstallScripts\\wt_32.ico"
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\Windows Terminal]
+@="Open in Windows &Terminal"
+"Icon"="C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.19.10573.0_x64__8wekyb3d8bbwe\\wt.exe"
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\Windows Terminal\command]
+@="\"C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.19.10573.0_x64__8wekyb3d8bbwe\\wt.exe\" -d ."
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
-@="C:\\Users\\Admin\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\Windows Terminal]
+@="Open in Windows &Terminal"
+"Icon"="C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.19.10573.0_x64__8wekyb3d8bbwe\\wt.exe"
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\Windows Terminal\command]
+@="\"C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.19.10573.0_x64__8wekyb3d8bbwe\\wt.exe\" -d ."
